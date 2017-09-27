@@ -105,6 +105,7 @@ namespace WebShop.Controllers
 
                         //return to state
                         vm.Title = p.Title;
+                        vm.ProductNumber = p.ProductNumber;
                         vm.Database = Session["Database"].ToString();
 
                 //state of integer default
