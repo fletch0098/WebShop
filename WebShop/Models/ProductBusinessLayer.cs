@@ -22,5 +22,13 @@ namespace WebShop.Models
             return p;
         }
 
+        public Product DeleteProduct(Product p)
+        {
+            WebShopERPDAL salesDal = new WebShopERPDAL();
+            salesDal.Products.Remove(p);
+            salesDal.SaveChanges();
+            return p;
+        }
+
     }
 }

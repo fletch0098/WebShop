@@ -15,4 +15,4 @@ Here is a list of enhancements I would do with more time:
 
 ## Links ##
 
- * [Demo](http://webshop-dev.us-east-1.elasticbeanstalk.com/)
+ * [Demo](http://sanawebshop-test.us-east-1.elasticbeanstalk.com/)

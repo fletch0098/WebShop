@@ -79,6 +79,7 @@ namespace WebShop.Controllers
                         {
                             //Retrieve current products
                             List<Product> Products = GetSessionProducts();
+
                             //Add new product to list
                             Products.Add(p);
                             //Store back into session
