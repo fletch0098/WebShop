@@ -1,0 +1,72 @@
+﻿@using WebShop.ViewModels
+@model CreateProductViewModel
+
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>WebShop - Add Product</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <script>
+        function ResetForm() {
+            document.getElementById('TxtProductNumber').value = "";
+            document.getElementById('TxtTitle').value = "";
+            document.getElementById('TxtPrice').value = "";
+        }
+    </script>
+
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="jumbotron">
+            <h1>Sana WebShop</h1>
+            <p>Products management demo</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Add Products @Model.Database</h2>
+
+        @using (Html.BeginForm("SaveProduct", "Product", FormMethod.Post))
+        {
+            <form>
+                <div class="form-group">
+                    <label for="ProductNumber">Product Number</label>
+                    <input type="text" class="form-control is-valid" id="TxtProductNumber" name="ProductNumber" placeholder="Product Number" required>
+                    <div class="invalid-feedback">@Html.ValidationMessage("Price")</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="Title">Title</label>
+                    <input type="text" class="form-control is-valid" id="TxtTitle" name="Title" placeholder="Title" required>
+                    <div class="invalid-feedback">@Html.ValidationMessage("Title")</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="Price">Price</label>
+                    <input type="text" class="form-control is-valid" id="TxtPrice" name="Price" placeholder="Price" required>
+                    <div class="invalid-feedback">@Html.ValidationMessage("Price")</div>
+                </div>
+
+                <input type="submit" name="BtnSubmit" class="btn btn-primary" value="Save Product" />
+                <a href="/Product/@(Model.Database + "Db")" class="btn btn-primary" role="button">Cancel</a>
+                <input type="button" name="BtnReset" class="btn btn-primary" value="Reset" onclick="ResetForm();" />
+
+            </form>
+        }
+
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+</body>
+</html>

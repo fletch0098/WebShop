@@ -1,0 +1,78 @@
+﻿@using WebShop.ViewModels
+@model ProductListViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>WebShop - View Products</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+
+    <div class="container">
+        <div class="jumbotron">
+            <h1>Sana WebShop</h1>
+            <p>Products management demo</p>
+        </div>
+    </div>
+
+    @using (Html.BeginForm("Index", "Product", FormMethod.Post))
+
+    {
+    <div class="container">
+        <div class="row">
+        </div>
+        <h2>View Products</h2>
+        <form class="form-inline">
+            <div class="form-group">
+                <label for="Database">@Html.LabelFor(c => c.Database)</label>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                        @Model.Database
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="/Product/SessionDb">Session</a></li>
+                        <li><a href="/Product/MsSQLDb">MsSQL</a></li>
+                    </ul>
+                </div>
+            </div>
+        </form>
+        <table class="table table-condensed">
+            <thead>
+                <tr>
+                    <th>Product Number</th>
+                    <th>Title</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (ProductViewModel item in Model.Products)
+                {
+                    <tr>
+                        <td>@item.ProductNumber</td>
+                        <td>@item.Title</td>
+                        <td>@item.Price</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <a href="/Product/AddProduct" class="btn btn-primary" role="button">Add Product</a>
+
+
+
+    </div>
+    }
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+</body>
+</html>
