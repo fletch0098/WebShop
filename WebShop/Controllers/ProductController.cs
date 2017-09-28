@@ -13,100 +13,70 @@ namespace WebShop.Controllers
         //Default 
         public ActionResult Index()
         {
-            //Redirect to Session DB default
-            return RedirectToAction("SessionDb");
+                //Return the View
+                return View("Index", BindProductListViewModel());
         }
       
         //set view with Database data
         public ActionResult MsSQLDb()
         {
-            //Create a new view model
-            ProductListViewModel vm = new ProductListViewModel();
-
-            //Save the Db preferences in session
-            Session["DataBase"] = "MsSQL";
-
-            //Bind the view model with Data
-            vm = BindListView("MsSQL");
-
-            //Save the Db prefference in view model
-            vm.Database = "MsSQL";
-
+            //Update session
+            SetSessionDatabase("MsSQL");
+            
             //Return the View
-            return View("Index", vm);
+            return RedirectToAction("Index");
         }
 
         //Set view with session data
         public ActionResult SessionDb()
         {
-            //Create a new view model
-            ProductListViewModel vm = new ProductListViewModel();
-
-            //Save the Db Preferences in session
-            Session["DataBase"] = "Session";
-
-            //Bind the view model with data
-            vm = BindListView("Session");
-
-            //Save the Db prefference in view model
-            vm.Database = "Session";
+            //Update Session
+            SetSessionDatabase("Session");
 
             //Return the View
-            return View("Index", vm);
+            return RedirectToAction("Index");
         }
 
-        //Add a new product
+        //set new product view
+        [HttpGet]
         public ActionResult AddProduct()
         {
             //Create a new view model
             CreateProductViewModel vm = new CreateProductViewModel();
 
             //Save the Db preferences in the view model
-            vm.Database = Session["Database"].ToString();
+            vm.Database = GetSessionDatabase();
 
             //Return the view
-            return View("CreateProduct", vm);
+            return View("AddProduct", vm);
         }
 
         //Save a new product
-        public ActionResult SaveProduct(Product p)
+        [HttpPost]
+        public ActionResult AddProduct(Product p)
         {
             //if product is valid against entity model(server side)
             if (ModelState.IsValid)
-                    {
-                        //Check Db preferences
-                        if (Session["DataBase"].ToString() == "Session")
-                        {
-                            //Retrieve current products
-                            List<Product> Products = GetSessionProducts();
+            {
+                //Using database storage
+                ProductBusinessLayer empBal = new ProductBusinessLayer();
 
-                            //Add new product to list
-                            Products.Add(p);
-                            //Store back into session
-                            Session["Products"] = Products;
-                            //Return to product list view
-                            return RedirectToAction("SessionDb");
-                        }
-                        else
-                        {
-                            //Using database storage
-                            ProductBusinessLayer empBal = new ProductBusinessLayer();
-                            //Add to entity list
-                            empBal.SaveProduct(p);
-                            //Return to product list view
-                            return RedirectToAction("MsSQLDb");
-                        }
-                    }
+                //Add to entity list
+                empBal.SaveProduct(p);
+
+                //Return to product list view
+                return RedirectToAction("Index");
+            }
             else
-                    {
-                        //Does not pass Server validation return to view with state
-                        //create new view model
-                        CreateProductViewModel vm = new CreateProductViewModel();
+            {
+                //Does not pass Server validation return to view with state
+                //create new view model
+                CreateProductViewModel vm = new CreateProductViewModel();
 
-                        //return to state
-                        vm.Title = p.Title;
-                        vm.ProductNumber = p.ProductNumber;
-                        vm.Database = Session["Database"].ToString();
+                //return to state
+                vm.Title = p.Title;
+                vm.ProductNumber = p.ProductNumber;
+                vm.Database = GetSessionDatabase();
 
                 //state of integer default
                 if (p.Price == 0)
@@ -119,37 +89,43 @@ namespace WebShop.Controllers
                         }
 
                 //Return to view with state
-                return View("CreateProduct", vm);
-             }
+                return View("AddProduct", vm);
+            }
             
         }
 
-        //Bind view data
-        private ProductListViewModel BindListView(string database)
+        //Delete product
+        public ActionResult DeleteProduct(int id)
         {
-            //Create new list view model
+            //Using database storage
+            ProductBusinessLayer empBal = new ProductBusinessLayer();
+
+            //Add to entity list
+            empBal.DeleteProduct(id);
+
+            //Return to previous view
+            return RedirectToAction("Index");
+        }
+
+        //Bind the view
+        private ProductListViewModel BindProductListViewModel()
+        {
+            //Create a new view model
             ProductListViewModel vm = new ProductListViewModel();
+
+            //Get Database Preferences
+            string database = GetSessionDatabase();
 
             //Create new list of products
             List<Product> Products = new List<Product>();
 
-            //Check Db Preference
-            if (database == "Session")
-            {
-                //fill view model with Session data
-                Products = GetSessionProducts();
-            }
-            else
-            {
-                //fill view model with database data
-                ProductBusinessLayer empBal = new ProductBusinessLayer();
-                Products = empBal.GetProducts();
-            }
+            //fill view model with data
+            ProductBusinessLayer empBal = new ProductBusinessLayer();
+            Products = empBal.GetProducts();
 
-            //layer in case of any changes to the view
             //Create new product view model
             List<ProductViewModel> empViewModels = new List<ProductViewModel>();
-            
+
             //set up product view model
             foreach (Product prd in Products)
             {
@@ -157,32 +133,63 @@ namespace WebShop.Controllers
                 prdViewModel.Title = prd.Title;
                 prdViewModel.ProductNumber = prd.ProductNumber;
                 prdViewModel.Price = prd.Price.ToString("C");
+                prdViewModel.ProductId = prd.ProductID;
                 empViewModels.Add(prdViewModel);
             }
 
             //set list
             vm.Products = empViewModels;
 
-            //return the binded vm
+            //Save the Db prefference in view model
+            vm.Database = database;
+
+            //Return the View
             return vm;
         }
 
-        //Retrieve session data
-        private List<Product> GetSessionProducts()
+        //Bool for Session Db
+        private bool UsingSessionDb()
         {
-            //Empty list
-            List<Product> Products = new List<Product>();
-
-            //Check for session data
-            if (Session["Products"] != null)
+            if (Session["DataBase"] != null)
             {
-                //fill list
-                Products = Session["Products"] as List<Product>;
+                //Not Null check which
+                if (Session["DataBase"].ToString() == "MsSQL")
+                    //Not Session
+                { return false; }
+                else
+                //Session
+                { return true; }
+
             }
+            else
+            {
+                //Defualt
+                SetSessionDatabase("Session");
+                { return true; }
+            }
+            
+            
+        }
 
-            //return data
-            return Products;
+        //Update Session
+        private void SetSessionDatabase(string db)
+        {
+            Session["Database"] = db;
+        }
 
+        //Return which database
+        private string GetSessionDatabase()
+        {
+            if (Session["Database"] != null)
+            {
+                //Return session data
+                return Session["Database"].ToString();
+            }
+            {
+                //Default
+                SetSessionDatabase("Session");
+                return "Session";
+            }
         }
 
     }

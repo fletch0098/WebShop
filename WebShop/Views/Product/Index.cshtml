@@ -60,11 +60,12 @@
                         <td>@item.ProductNumber</td>
                         <td>@item.Title</td>
                         <td>@item.Price</td>
+                        <td><a href="/Product/DeleteProduct/@item.ProductId" class="btn btn-primary" role="button">Delete</a></td>
                     </tr>
                 }
             </tbody>
         </table>
-        <a href="/Product/AddProduct" class="btn btn-primary" role="button">Add Product</a>
+        <a href="/Home/AddProduct" class="btn btn-primary" role="button">Add Product</a>
 
 
 

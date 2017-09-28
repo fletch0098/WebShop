@@ -20,6 +20,12 @@ namespace WebShop
             );
 
             routes.MapRoute(
+            name: "CreateProduct",
+            url: "Home/AddProduct",
+            defaults: new { controller = "Product", action = "AddProduct" }
+            );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Product", action = "Index", id = UrlParameter.Optional }
