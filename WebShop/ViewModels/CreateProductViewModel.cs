@@ -5,7 +5,7 @@ using System.Web;
 
 namespace WebShop.ViewModels
 {
-    public class CreateProductViewModel
+    public class CreateProductViewModel : BaseViewModel
     {
         public string ProductNumber { get; set; }
         public string Title { get; set; }

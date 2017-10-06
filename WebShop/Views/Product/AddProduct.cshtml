@@ -2,36 +2,14 @@
 @model CreateProductViewModel
 
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/BaseLayout.cshtml";
 }
-<!DOCTYPE html>
-<html>
 
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>WebShop - Add Product</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+@section TitleSection{
+    Add Product
+}
 
-    <script>
-        function ResetForm() {
-            document.getElementById('TxtProductNumber').value = "";
-            document.getElementById('TxtTitle').value = "";
-            document.getElementById('TxtPrice').value = "";
-        }
-    </script>
-
-</head>
-
-<body>
-
-    <div class="container">
-        <div class="jumbotron">
-            <h1>Sana WebShop</h1>
-            <p>Products management demo</p>
-        </div>
-    </div>
-
+@section ContentBody{
     <div class="container">
         <h2>Add Products to Database: @Model.Database</h2>
 
@@ -65,8 +43,4 @@
 
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-
-</body>
-</html>
+    }

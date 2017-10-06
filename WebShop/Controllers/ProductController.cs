@@ -5,18 +5,22 @@ using System.Web;
 using System.Web.Mvc;
 using WebShop.Models;
 using WebShop.ViewModels;
+using WebShop.Filters;
 
 namespace WebShop.Controllers
 {
     public class ProductController : Controller
     {
-        //Default 
-        public ActionResult Index()
+        //Default
+
+        [HeaderFooterFilter]
+        public ActionResult Index(string id)
         {
-                //Return the View
-                return View("Index", BindProductListViewModel());
+
+            //Return the View
+            return View("Index", BindProductListViewModel());
         }
-      
+
         //set view with Database data
         public ActionResult MsSQLDb()
         {
@@ -39,6 +43,7 @@ namespace WebShop.Controllers
 
         //set new product view
         [HttpGet]
+        [HeaderFooterFilter]
         public ActionResult AddProduct()
         {
             //Create a new view model
@@ -53,6 +58,7 @@ namespace WebShop.Controllers
 
         //Save a new product
         [HttpPost]
+        [HeaderFooterFilter]
         public ActionResult AddProduct(Product p)
         {
             //if product is valid against entity model(server side)
@@ -141,7 +147,7 @@ namespace WebShop.Controllers
             vm.Products = empViewModels;
 
             //Save the Db prefference in view model
-            vm.Database = database;
+            vm.Database = database;            
 
             //Return the View
             return vm;

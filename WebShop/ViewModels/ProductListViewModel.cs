@@ -7,7 +7,7 @@ using System.Web.Mvc;
 
 namespace WebShop.ViewModels
 {
-    public class ProductListViewModel
+    public class ProductListViewModel : BaseViewModel
     {
 
         public List<ProductViewModel> Products { get; set; }

@@ -1,0 +1,51 @@
+﻿@using WebShop.ViewModels
+@model BaseViewModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>@Model.HeaderData.WebsiteTitle - @RenderSection("TitleSection") </title>
+    @RenderSection("HeaderSection", false)
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <script>
+        function ResetForm() {
+            document.getElementById('TxtProductNumber').value = "";
+            document.getElementById('TxtTitle').value = "";
+            document.getElementById('TxtPrice').value = "";
+        }
+    </script>
+
+</head>
+<body>
+
+    @{
+        Html.RenderPartial("Header", Model.HeaderData);
+    }
+
+    <div class="container">
+        @RenderSection("ContentBody")
+        @*<hr />*@
+    </div>
+
+
+        @{
+            Html.RenderPartial("Footer", Model.FooterData);
+        }
+
+        @*<footer class="text-center modal-footer" style="background-color: silver;color: darkcyan;border: 1px solid gray;margin-top:2px;padding-right:10px; height:100px">
+                <p>&copy; @ViewBag.Year - @ViewBag.Title</p>
+            </footer>*@
+
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @RenderSection("scripts", required: false)
+</body>
+</html>
